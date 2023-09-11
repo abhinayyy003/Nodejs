@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <title>Document</title>
+</head>
+<body>
+  <div id="main">
+    <div id="side">
+      <h4>A-TEXT</h4>
+      <!-- <hr style="color: black;">  this is used to draw a line under h4 tag --> 
+      <div id="line"></div>
+     
+      <div class="fileicon">
+        <h5>Folder Name</h5>
+        
+        <div class="icons">
+          <i id="filecreate" class="ri-file-add-line"></i>
+          <i id="foldercreate" class="ri-folder-add-line"></i>
+          <i class="ri-refresh-fill"></i>
+        </div>
+      
+      </div>
+     
+      <form class="fromcreation" id="fileform" action="/filecreate" method="get">
+        <input name="filename" type="text" placeholder="filename"> <!-- the input that you have given will save in a variable name over here the name is filename and when you press enter then you can access it-->
+      </form>
+     
+      <form class="fromcreation" id="folderform" action="/foldercreate" method="get">
+        <input name="foldername" type="text" placeholder="foldername">
+      </form>
+     
+
+      <div class="files">
+      <% files.forEach(function(elem){ %>
+        <h5 class="file" > 
+          <% if(elem.isDirectory()){ %>
+            <i class="ri-folder-3-fill"></i>
+          <% } else{ %>
+            <i class="ri-file-text-line"></i>
+          <% }%>
+          <% if(elem.isDirectory()){ %>
+            <%= elem.name %>
+            <a href="/folderdelete/<%= elem.name %>"><i class="ri-delete-bin-5-line" style="float: right;"></i></a>
+          <% } else{ %>
+            <a href="/file/<%= elem.name %>"><%= elem.name %></a>
+            <a href="/filedelete/<%= elem.name %>"><i class="ri-delete-bin-5-line" style="float: right;"></i></a>
+          <% } %>
+        </h5>
+      <%}) %>
+      </div>
+    
+    </div>
+    <div id="right">
+      <div id="rightnav">
+        <div class="openedfile">
+          <%= filename %>
+          <a href="/"><i class="ri-close-circle-fill"></i></a> <!-- / this will route to index.js coz / is the route that we have given to index.js -->
+        </div> 
+      </div>
+      <form action="/filechange/<%= filename %>" method="post">
+        <textarea name="filedata"><%= filedata %></textarea>
+        <input id="buttonsave" type="submit" value="Save File">
+      </form>
+      <!-- <small>nothing here</small> -->
+    </div>
+  <script>
+
+    // function turnOffBoth(){
+    //   var allelems =[...document.querySelectorAll('form')] // in nodelist we don’t have map or filter function like array so we convert that into array so we converted nodelist into array
+    //   allelems.forEach(function(elem){
+    //     elem.style.display = "none"
+    //   })
+    // } this will becomde for all the forms in the ejs page to clarify that issue we have created same class formcreation where it does the same thing
+    
+    function turnOffBoth(){
+      document.querySelectorAll(".fromcreation")
+        .forEach(function(elem){
+          elem.style.display = "none";
+      })
+    }
+    var filecreateicon= document.querySelector('#filecreate')
+    filecreateicon.addEventListener('click', function(){
+      turnOffBoth()
+      document.querySelector("#fileform").style.display = "initial"
+    })
+
+    var foldercreateicon= document.querySelector('#foldercreate')
+    foldercreateicon.addEventListener('click', function(){
+      turnOffBoth()
+      document.querySelector("#folderform").style.display = "initial"
+    })
+  </script>
+</body>
+</html>
